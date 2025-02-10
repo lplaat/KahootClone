@@ -12,6 +12,7 @@ services:
             - .env
         depends_on:
             - db
+            - mailpit
 
     db:
         image: mysql:8.0
@@ -35,6 +36,14 @@ services:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
         depends_on:
             - db
+
+    mailpit:
+        image: axllent/mailpit
+        container_name: KC-mailpit
+        ports:
+            - "8025:8025"  # Web UI
+            - "1025:1025"  # SMTP Server
+        restart: always
 
 volumes:
     db_data:
