@@ -1,13 +1,18 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>hoi</h1>
-</body>
-</html>
+<x-guest-layout>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <form method="POST">
+        @csrf
+        <a href="/login" class="text-gray-100 absolute right-10 top-5 bg-gray-200 hover:bg-white text-gray-800 p-1 rounded">login</a>
+        <!-- Email Address -->
+        <div>
+            <x-text-input id="code" class="block mt-1 w-full" type="text" name="code" required autofocus autocomplete="username" placeholder="Vul de speelpin in" />
+        </div>
+
+        <div class="flex items-center justify-center mt-4">
+            <x-primary-button class="w-full justify-center">
+                {{ __('starten') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
