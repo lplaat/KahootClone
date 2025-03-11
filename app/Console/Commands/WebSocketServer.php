@@ -10,6 +10,7 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\Loop;
 use React\Socket\SocketServer;
+use App\Http\Controllers\RoomController;
 
 class WebSocketServer extends Command implements MessageComponentInterface
 {
@@ -31,11 +32,11 @@ class WebSocketServer extends Command implements MessageComponentInterface
             new HttpServer(
                 new WsServer($this)
             ),
-            new SocketServer('0.0.0.0:3000', [], $loop),
+            new SocketServer(env('WEBSOCKET_HOST') . ':' . env('WEBSOCKET_PORT'), [], $loop),
             $loop
         );
 
-        $this->info("WebSocket server started on ws://127.0.0.1:3000");
+        $this->info("WebSocket server started on " . env('WEBSOCKET_URL'));
         $loop->run();
     }
 
@@ -47,11 +48,9 @@ class WebSocketServer extends Command implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        echo "Message received: $msg\n";
-        foreach ($this->clients as $client) {
-            if ($client !== $from) {
-                $client->send($msg);
-            }
+        $request = json_decode($msg, true);
+        if($request['type'] == 'createRoom') {
+            RoomController::createRoom($request, $from);
         }
     }
 
