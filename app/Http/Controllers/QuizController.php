@@ -27,6 +27,8 @@ class QuizController extends Controller
                 $answer->save();
             }
         }
-        return redirect()->route('dashboard')->with('success', 'Quiz created successfully!');
+        return [
+            'redirect' => '/dashboard'
+        ];
     }
 }
