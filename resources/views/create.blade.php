@@ -66,12 +66,15 @@
             questionArray["questions"].push(json);
             
         });
-        
+
         $.ajax({
             url: "/create",
             method: "POST",
             data: questionArray,
-            dataType: "json"
+            dataType: "json",
+            success: function(response) {
+                window.location.href = response.redirect
+            }
         })
     });
 
