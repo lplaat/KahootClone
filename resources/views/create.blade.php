@@ -4,7 +4,7 @@
             {{ __('Make quiz') }}
         </h2>
     </x-slot>
-    <div id="answerTemplate" style="display: none">
+    <div id="answerTemplate" class="mt-2" style="display: none">
         <label>Answer</label>
         <div>
             <input type="radio" id="correctAnswer" name="correctAnswer" class="form-check-input">
@@ -21,12 +21,13 @@
                             <label for="1">Question 1</label>
                             <input type="text" class="form-control" id="1" name="questions[]">
                         </div>
-                        <x-primary-button type="button" class="addAnswer">{{__("Add answer")}}</x-primary-button>
+                        <x-primary-button type="button" class="addAnswer mt-2">{{__("Add answer")}}</x-primary-button>
+                        <x-danger-button type="button" class="removeQuestion mt-2" style="display:none;" onclick="removeQuestion(this)">{{__("Remove Question")}}</x-danger-button>
                         <div id="answers"></div>
                     </div>
                 </div>
-                <x-primary-button type="button" id="addQuestion">{{__("Add question")}}</x-primary-button>
-                <x-primary-button type="button" id="makeQuiz">{{__("Make quiz")}}</x-primary-button>
+                <x-primary-button type="button" id="addQuestion" class="mt-2">{{__("Add question")}}</x-primary-button>
+                <x-primary-button type="button" id="makeQuiz" class="mt-2">{{__("Make quiz")}}</x-primary-button>
             </form>
         </div>
     </div>
@@ -51,13 +52,20 @@
         let question = $("#1").clone(true);
         question.find("label").attr("for", questions).html("Question" + questions);
         question.find("#answers").empty();
+        question.addClass("mt-2");
+        question.find(".removeQuestion").show();
         question.attr("id", questions);
         $("#questions").append(question);
     });
 
     function removeAnswer(element) {
-        $(element).parent().remove();
+        $(element).parent().parent().remove();
         answers--;
+    }
+
+    function removeQuestion(element) {
+        $(element).parent().remove();
+        questions--;
     }
 
     $("#makeQuiz").on("click", function (){
