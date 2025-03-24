@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
+            $table->string(column: "code");
             $table->unsignedBigInteger('quiz_id');
-            $table->unsignedBigInteger('host_user_id');
             $table->timestamps();
         });
     }

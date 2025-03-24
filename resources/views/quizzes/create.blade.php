@@ -31,6 +31,7 @@
         </div>
     </div>
 </x-app-layout>
+
 <script>
     let maxAnswers = 4;
     let answers = 1;

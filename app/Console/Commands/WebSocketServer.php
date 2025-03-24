@@ -51,6 +51,8 @@ class WebSocketServer extends Command implements MessageComponentInterface
         $request = json_decode($msg, true);
         if($request['type'] == 'createRoom') {
             RoomController::createRoom($request, $from);
+        } else if($request['type'] == 'loadPage') {
+            RoomController::loadPage($request, $from);
         }
     }
 
