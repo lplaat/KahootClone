@@ -33,7 +33,7 @@
                 </x-slot>
             </x-dropdown>
 
-            <x-secondary-button href="/create">
+            <x-secondary-button href="/quiz/create">
                 {{ __('Make quiz') }}
             </x-secondary-button>
             
