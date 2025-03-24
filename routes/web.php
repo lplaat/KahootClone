@@ -18,10 +18,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/create', function () {
+Route::get('/quiz/create', function () {
     return view('create');
 })->middleware(['auth', 'verified'])->name('create');
 
-Route::post('/create', [QuizController::class, 'store'])->middleware(['auth', 'verified']);
+Route::post('/quiz/create', [QuizController::class, 'store'])->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

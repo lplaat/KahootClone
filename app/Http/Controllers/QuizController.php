@@ -23,8 +23,13 @@ class QuizController extends Controller
             {
                 $answer = new Answer();
                 $answer->question_id = $question->id;
-                $answer->answer = $value;
+                $answer->answer = $value["answer"];
                 $answer->save();
+
+                if (!empty($value["correctAnswer"])) {
+                    $question->answer_id = $answer->id;
+                    $question->save();
+                }
             }
         }
         return [

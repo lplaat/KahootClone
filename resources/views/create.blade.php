@@ -4,6 +4,14 @@
             {{ __('Make quiz') }}
         </h2>
     </x-slot>
+    <div id="answerTemplate" style="display: none">
+        <label>Answer</label>
+        <div>
+            <input type="radio" id="correctAnswer" name="correctAnswer" class="form-check-input">
+            <input type="text" name="answers" class="form-control" style="width: 90%; display: initial;"> 
+            <button type="button" onclick="removeAnswer(this)" class="btn btn-danger mb-1"><i class="bi bi-trash"></i></button>
+        </div>
+    </div>
     <div class="p-3">
         <div>
             <form method="post" id="createForm">
@@ -14,8 +22,7 @@
                             <input type="text" class="form-control" id="1" name="questions[]">
                         </div>
                         <x-primary-button type="button" class="addAnswer">{{__("Add answer")}}</x-primary-button>
-                        <div id="answers">
-                        </div>
+                        <div id="answers"></div>
                     </div>
                 </div>
                 <x-primary-button type="button" id="addQuestion">{{__("Add question")}}</x-primary-button>
@@ -31,8 +38,11 @@
     $(".addAnswer").on("click", function(){
         answers = $(this).parent().find("#answers").children().length + 1;
         if (answers <= 4 ) {
-            $(this).parent().find("#answers").append('<div>Answer ' + answers + '<br> <input type="text" name="answers[question ' + $(this).parent().attr("id") +']" class="form-control" style="width: 90%; display: initial;"> <button type="button" onclick="removeAnswer(this)" class="btn btn-danger mb-1"><i class="bi bi-trash"></i></button></div>');
-            answers++;
+            let answer = $("#answerTemplate").clone(true);
+            answer.find('label').html("Answer " + answers);
+            answer.find('#correctAnswer').attr("name", "correctAnswer" + $(this).parent().attr("id"));
+            answer.show();
+            $(this).parent().find("#answers").append(answer);
         }
     });
     
@@ -57,10 +67,14 @@
         };
         
         $("[name *= questions]").each(function() {
-            json = {"question": $(this).val(), "answers": []}
-            
+            json = {"question": $(this).val(), "answers": []};    
             $(this).parent().parent().find("[name*=answers]").each(function () {
-                json["answers"].push($(this).val());
+                let answerJson = {"answer": $(this).val(), "correctAnswer": ""}
+                
+                if ($(this).parent().find("[name*=correctAnswer]:checked").length > 0) {
+                    answerJson["correctAnswer"] = $(this).val();
+                }
+                json["answers"].push(answerJson);
             })
             
             questionArray["questions"].push(json);
@@ -68,14 +82,14 @@
         });
 
         $.ajax({
-            url: "/create",
+            url: "/quiz/create",
             method: "POST",
             data: questionArray,
             dataType: "json",
             success: function(response) {
                 window.location.href = response.redirect
             }
-        })
+        });
     });
 
 </script>
