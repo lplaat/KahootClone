@@ -12,6 +12,29 @@ function messageRouter(event) {
     }
 }
 
+async function connectToRoom(code, url) {
+    const ws = startWebsocket(url);
+
+    ws.onopen = function () {
+        sendCommand(ws, 'joinRoom', {
+            'quiz_code': code
+        });
+    }
+
+    return new Promise(function(myResolve) {
+        ws.onmessage = function(event) {
+            let data = JSON.parse(event.data);
+            if(data['type'] == 'joinRoom') {
+                if(data['success']) {
+                    myResolve([true, ws]);
+                } else {
+                    myResolve([false, data['message']]);
+                }
+            }
+        }
+    });
+}
+
 function sendCommand(ws, type, data) {
     ws.send(JSON.stringify({
         'type': type,

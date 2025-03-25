@@ -33,7 +33,7 @@ RUN chown -R www-data:www-data /var/www/html/storage/logs /var/www/html/storage/
 
 # Expose port 80 for Apache
 EXPOSE 80
-EXPOSE 3000
+EXPOSE 2999
 
 # Start Apache server
 CMD ["apache2-foreground"]
